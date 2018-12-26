@@ -42,6 +42,12 @@ class RegisterController: UIViewController, UIImagePickerControllerDelegate, UIN
         view.backgroundColor = UIColor(red: 211/255, green: 211/255, blue: 211/255, alpha: 1)
         return view
     }()
+    let rec: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.white
+        return view
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +63,7 @@ class RegisterController: UIViewController, UIImagePickerControllerDelegate, UIN
         NSLayoutConstraint.activate([
             inputsContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             inputsContainerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            inputsContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -24),
+            inputsContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -50),
             inputsContainerView.heightAnchor.constraint(equalToConstant: 200)
             ])
         
@@ -74,11 +80,12 @@ class RegisterController: UIViewController, UIImagePickerControllerDelegate, UIN
         view.addSubview(registerButton)
         NSLayoutConstraint.activate([
             registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            registerButton.topAnchor.constraint(equalTo: inputsContainerView.bottomAnchor, constant: 12),
+            registerButton.topAnchor.constraint(equalTo: inputsContainerView.bottomAnchor, constant: 20),
             registerButton.widthAnchor.constraint(equalToConstant: 200),
             registerButton.heightAnchor.constraint(equalToConstant: registerButtonHeight)
             ])
         
+        view.addSubview(rec)
         loginLabel = UILabel()
         loginLabel.translatesAutoresizingMaskIntoConstraints = false
         loginLabel.text = "Already have an account? "
@@ -86,10 +93,9 @@ class RegisterController: UIViewController, UIImagePickerControllerDelegate, UIN
         loginLabel.font = UIFont.systemFont(ofSize: 15, weight: .light)
         view.addSubview(loginLabel)
         NSLayoutConstraint.activate([
-            loginLabel.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 12),
+            loginLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -12),
             loginLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -24)
             ])
-        
         loginButton = UIButton()
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         loginButton.backgroundColor = .clear
@@ -102,6 +108,12 @@ class RegisterController: UIViewController, UIImagePickerControllerDelegate, UIN
             loginButton.leadingAnchor.constraint(equalTo: loginLabel.trailingAnchor),
             loginButton.centerYAnchor.constraint(equalTo: loginLabel.centerYAnchor)
         ])
+        NSLayoutConstraint.activate([
+            rec.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            rec.widthAnchor.constraint(equalTo: view.widthAnchor),
+            rec.topAnchor.constraint(equalTo: loginLabel.topAnchor, constant: -12),
+            rec.heightAnchor.constraint(equalToConstant: 0.5)
+            ])
         
         usernameTextField = UITextField()
         usernameTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -182,7 +194,7 @@ class RegisterController: UIViewController, UIImagePickerControllerDelegate, UIN
         view.addSubview(profileImageView)
         NSLayoutConstraint.activate([
             profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            profileImageView.bottomAnchor.constraint(equalTo: inputsContainerView.topAnchor, constant: -12),
+            profileImageView.bottomAnchor.constraint(equalTo: inputsContainerView.topAnchor, constant: -20),
             profileImageView.widthAnchor.constraint(equalToConstant: profileImageViewHeight),
             profileImageView.heightAnchor.constraint(equalToConstant: profileImageViewHeight)
             ])

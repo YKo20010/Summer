@@ -35,13 +35,13 @@ class CustomTabBarController: UITabBarController {
         homeController.navigationItem.title = "Messages"
         nav_home = UINavigationController(rootViewController: homeController)
         nav_home.title = "Home"
-        nav_home.tabBarItem.image = UIImage(named: "home")
+        nav_home.tabBarItem.image = UIImage(named: "iconChat")
         
         /*********************     SETTINGS VIEW CONTROLLER    ********************/
         profileController.navigationItem.title = "Profile"
         let nav_profile = UINavigationController(rootViewController: profileController)
         nav_profile.title = "Profile"
-        nav_profile.tabBarItem.image = UIImage(named: "profile")
+        nav_profile.tabBarItem.image = UIImage(named: "iconProfile")
   
         /*********************     Set ViewControllers for TabBarController    ********************/
         viewControllers = [nav_home, nav_profile]

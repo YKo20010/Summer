@@ -26,6 +26,12 @@ class LoginController: UIViewController {
         view.backgroundColor = UIColor(red: 211/255, green: 211/255, blue: 211/255, alpha: 1)
         return view
     }()
+    let rec: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.white
+        return view
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +49,7 @@ class LoginController: UIViewController {
         NSLayoutConstraint.activate([
             inputsContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             inputsContainerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            inputsContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -24),
+            inputsContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -50),
             inputsContainerView.heightAnchor.constraint(equalToConstant: 100)
             ])
         
@@ -61,11 +67,12 @@ class LoginController: UIViewController {
         view.addSubview(loginButton)
         NSLayoutConstraint.activate([
             loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loginButton.topAnchor.constraint(equalTo: inputsContainerView.bottomAnchor, constant: 12),
+            loginButton.topAnchor.constraint(equalTo: inputsContainerView.bottomAnchor, constant: 20),
             loginButton.widthAnchor.constraint(equalToConstant: 200),
             loginButton.heightAnchor.constraint(equalToConstant: loginButtonHeight)
             ])
         
+        view.addSubview(rec)
         registerLabel = UILabel()
         registerLabel.translatesAutoresizingMaskIntoConstraints = false
         registerLabel.text = "Don't have an account yet? "
@@ -73,7 +80,7 @@ class LoginController: UIViewController {
         registerLabel.font = UIFont.systemFont(ofSize: 15, weight: .light)
         view.addSubview(registerLabel)
         NSLayoutConstraint.activate([
-            registerLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 12),
+            registerLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -12),
             registerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -24)
             ])
         registerButton = UIButton()
@@ -87,6 +94,12 @@ class LoginController: UIViewController {
         NSLayoutConstraint.activate([
             registerButton.leadingAnchor.constraint(equalTo: registerLabel.trailingAnchor),
             registerButton.centerYAnchor.constraint(equalTo: registerLabel.centerYAnchor)
+            ])
+        NSLayoutConstraint.activate([
+            rec.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            rec.widthAnchor.constraint(equalTo: view.widthAnchor),
+            rec.topAnchor.constraint(equalTo: registerLabel.topAnchor, constant: -12),
+            rec.heightAnchor.constraint(equalToConstant: 0.5)
             ])
         
         emailTextField = UITextField()
@@ -127,7 +140,7 @@ class LoginController: UIViewController {
         view.addSubview(imageView)
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            imageView.bottomAnchor.constraint(equalTo: inputsContainerView.topAnchor, constant: -12),
+            imageView.bottomAnchor.constraint(equalTo: inputsContainerView.topAnchor, constant: -20),
             imageView.widthAnchor.constraint(equalToConstant: imageViewHeight),
             imageView.heightAnchor.constraint(equalToConstant: imageViewHeight)
             ])
