@@ -10,8 +10,32 @@ import UIKit
 import Firebase
 
 class ProfileController: UIViewController {
-    var logoutButton: UIButton!
-    var nameLabel: UILabel!
+    var me: Person? {
+        didSet {
+            self.dataView.nameLabel.text = me?.name
+            self.dataView.emailLabel.text = me?.email
+            self.dataView.usernameLabel.text = me?.username
+        }
+    }
+    var logoutButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UIColor(red: 81/255, green: 188/255, blue: 168/255, alpha: 1)
+        button.setTitle("Logout", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        button.layer.masksToBounds = true
+        return button
+    }()
+    var profileImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.backgroundColor = .white
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.layer.masksToBounds = true
+        return imageView
+    }()
+    var dataView: profileView = profileView()
     
     override func viewDidAppear(_ animated: Bool) {
         navigationController?.navigationBar.shadowImage = UIImage()
@@ -26,13 +50,7 @@ class ProfileController: UIViewController {
         view.backgroundColor = .white
         
         let logoutButtonHeight: CGFloat = 50
-        logoutButton = UIButton()
-        logoutButton.translatesAutoresizingMaskIntoConstraints = false
-        logoutButton.backgroundColor = UIColor(red: 81/255, green: 188/255, blue: 168/255, alpha: 1)
         logoutButton.layer.cornerRadius = logoutButtonHeight/2
-        logoutButton.layer.masksToBounds = true
-        logoutButton.setTitle("Logout", for: .normal)
-        logoutButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         logoutButton.addTarget(self, action: #selector(logout), for: .touchDown)
         view.addSubview(logoutButton)
         NSLayoutConstraint.activate([
@@ -42,22 +60,22 @@ class ProfileController: UIViewController {
             logoutButton.heightAnchor.constraint(equalToConstant: logoutButtonHeight)
             ])
         
-        nameLabel = UILabel()
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        let uid = Auth.auth().currentUser?.uid
-        Database.database().reference().child("users").child(uid!).observeSingleEvent(of: .value, with: { (dataSnapshot) in
-            if let dictionary = dataSnapshot.value as? [String: AnyObject] {
-                self.nameLabel.text = dictionary["name"] as? String
-            }
-        }, withCancel: nil)
-        nameLabel.font = UIFont.systemFont(ofSize: 25, weight: .semibold)
-        nameLabel.textColor = UIColor.gray
-        view.addSubview(nameLabel)
+        let profileImageViewHeight: CGFloat = 50
+        profileImageView.layer.cornerRadius = profileImageViewHeight/2
+        view.addSubview(profileImageView)
         NSLayoutConstraint.activate([
-            nameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-            nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24)
+            profileImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            profileImageView.heightAnchor.constraint(equalToConstant: profileImageViewHeight),
+            profileImageView.widthAnchor.constraint(equalToConstant: profileImageViewHeight),
+            profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20)
             ])
         
+        dataView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(dataView)
+        NSLayoutConstraint.activate([
+            dataView.topAnchor.constraint(equalTo: profileImageView.topAnchor),
+            dataView.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 20)
+            ])
     }
     
     @objc func logout() {

@@ -156,12 +156,27 @@ class LoginController: UIViewController {
             }
             let tabView = CustomTabBarController()
             let uid = Auth.auth().currentUser?.uid
-            Database.database().reference().child("users").child(uid!).observeSingleEvent(of: .value, with: { (dataSnapshot) in
-                if let dictionary = dataSnapshot.value as? [String: AnyObject] {
-                    tabView.homeController.email = (dictionary["email"] as? String)!
-                }
-            }, withCancel: nil)
-            self.present(tabView, animated: true, completion: nil)
+            tabView.homeController.loadMessages()
+            DispatchQueue.main.async {
+                Database.database().reference().child("users").child(uid!).observeSingleEvent(of: .value, with: { (dataSnapshot) in
+                    if let dictionary = dataSnapshot.value as? [String: AnyObject] {
+                        let person = Person()
+                        person.name = dictionary["name"] as? String
+                        person.email = (dictionary["email"] as? String)!
+                        person.id = uid
+                        person.profileImageName = dictionary["profileImageURL"] as? String
+                        person.username = dictionary["username"] as? String
+                        tabView.homeController.me = person
+                        tabView.profileController.me = person
+                        if let profileImageURL = person.profileImageName {
+                            tabView.profileController.profileImageView.loadImage(urlString: profileImageURL)
+                        }
+                    }
+                    DispatchQueue.main.async {
+                        self.present(tabView, animated: true, completion: nil)
+                    }
+                }, withCancel: nil)
+            }
         }
     }
     

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class homeCVC: UICollectionViewCell {
     
@@ -19,19 +20,32 @@ class homeCVC: UICollectionViewCell {
     
     var message: Message? {
         didSet {
-            nameLabel.text = message?.person?.name
-            messageLabel.text = message?.text
-            
-            if let imageName = message?.person?.profileImageName {
-                circleImage.image = UIImage(named: imageName)
-                circleImage2.image = UIImage(named: imageName)
+            let chatPartnerId: String?
+            if message?.fromId == Auth.auth().currentUser?.uid {
+                chatPartnerId = message?.toId
             }
-            
-            if let date = message?.date {
+            else {
+                chatPartnerId = message?.fromId
+            }
+            if let id = chatPartnerId {
+                let ref = Database.database().reference().child("users").child(id)
+                ref.observeSingleEvent(of: .value, with: { (snapshot) in
+                    if let dictionary = snapshot.value as? [String : AnyObject] {
+                        self.nameLabel?.text = dictionary["name"] as? String
+                        if let imageUrl = dictionary["profileImageURL"] as? String {
+                            self.circleImage.loadImage(urlString: imageUrl)
+                            self.circleImage2.loadImage(urlString: imageUrl)
+                        }
+                    }
+                }, withCancel: nil)
+            }
+            if let time = message?.timestamp {
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "h:mm a"
+                let date = Date(timeIntervalSince1970: time)
                 timeLabel.text = dateFormatter.string(from: date)
             }
+            messageLabel.text = message?.text
         }
     }
     
@@ -51,10 +65,10 @@ class homeCVC: UICollectionViewCell {
         line.layer.masksToBounds = true
         contentView.addSubview(line)
         NSLayoutConstraint.activate([
-            line.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            line.widthAnchor.constraint(equalToConstant: lineWidth),
-            line.heightAnchor.constraint(equalTo: contentView.heightAnchor, constant: -1.0*padding),
-            line.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            line.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            line.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
+            line.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0.5*padding),
+            line.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -0.5*padding)
             ])
         
         let circleHeight = contentView.frame.height - 4*padding

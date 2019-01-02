@@ -11,6 +11,8 @@ import Firebase
 
 class DiscoverController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate {
     
+    weak var delegate: showChat?
+    
     var collectionView: UICollectionView!
     var searchController: UISearchBar!
     
@@ -19,9 +21,9 @@ class DiscoverController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     var people: [Person] = []
     var selected_people: [Person] = []
-    var email: String = ""
+    var me: Person?
     let cellId = "cellId"
-    
+   
     override func viewDidAppear(_ animated: Bool) {
         navigationController?.navigationBar.prefersLargeTitles = false
         loadPeople()
@@ -79,38 +81,37 @@ class DiscoverController: UIViewController, UICollectionViewDelegateFlowLayout, 
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ])
-        
-        loadPeople()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if let searchText = searchController.text?.lowercased() {
             if !searchText.isEmpty {
                 selected_people = people.filter{($0.username?.lowercased().contains(searchText))!}
-                collectionView.reloadData()
+                collectionView?.reloadData()
             }
             else {
                 selected_people = []
-                collectionView.reloadData()
+                collectionView?.reloadData()
             }
         }
     }
     
     func loadPeople() {
         people = []
+        selected_people = []
         Database.database().reference().child("users").observe(.childAdded, with: { (dataSnapshot) in
             if let dictionary = dataSnapshot.value as? [String: AnyObject] {
                 let user = Person()
                 user.name = dictionary["name"] as? String
-                user.profileImageName = dictionary["profileImageName"] as? String
+                user.profileImageName = dictionary["profileImageURL"] as? String
                 user.email = dictionary["email"] as? String
                 user.username = dictionary["username"] as? String
-                if (user.email != self.email) {
+                user.id = dataSnapshot.key
+                if (user.email != self.me?.email) {
                     self.people.append(user)
                 }
                 DispatchQueue.main.async {
-                    self.selected_people = []
-                    self.collectionView.reloadData()
+                    self.collectionView?.reloadData()
                 }
             }
         }, withCancel: nil)
@@ -125,18 +126,24 @@ class DiscoverController: UIViewController, UICollectionViewDelegateFlowLayout, 
         let person = selected_people[indexPath.item]
         cell.nameLabel.text = person.name
         cell.usernameLabel.text = person.username
-        if (person.profileImageName == nil) {
-            let num = Int(arc4random_uniform(7)) + 1
-            cell.circleImage.image = UIImage(named: "pp\(num)")
-        }
-        else {
-            cell.circleImage.image = UIImage(named: person.profileImageName!)
+        cell.circleImage.image = UIImage(named: "")
+        if let profileImageURL = person.profileImageName {
+            cell.circleImage.loadImage(urlString: profileImageURL)
         }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width, height: 75)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.navigationController?.popViewController(animated: true)
+        self.delegate?.presentChat(user: selected_people[indexPath.item])
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        collectionView?.collectionViewLayout.invalidateLayout()
     }
     
     override func didReceiveMemoryWarning() {

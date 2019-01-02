@@ -8,12 +8,14 @@
 
 import Foundation
 import UIKit
+import Firebase
 
 class Person: NSObject {
     var name: String?
     var email: String?
     var profileImageName: String?
     var username: String?
+    var id: String?
     
     override init() {
         super.init()
@@ -21,12 +23,19 @@ class Person: NSObject {
         self.name = ""
         self.email = ""
         self.username = ""
+        self.id = ""
     }
 }
 
 class Message: NSObject {
+    
     var text: String?
-    var date: Date?
-    var person: Person?
+    var timestamp: Double?
+    var fromId: String?
+    var toId: String?
+    
+    func chatPartnerId() -> String? {
+        return fromId == Auth.auth().currentUser?.uid ? toId : fromId
+    }
 }
 

@@ -21,14 +21,13 @@ class personCVC: UICollectionViewCell {
         super.init(frame: frame)
         backgroundColor = UIColor.clear
         
-        let lineWidth = contentView.frame.width - 2*padding
         line = UIImageView()
         line.translatesAutoresizingMaskIntoConstraints = false
         line.backgroundColor = textColor
         contentView.addSubview(line)
         NSLayoutConstraint.activate([
-            line.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            line.widthAnchor.constraint(equalToConstant: lineWidth),
+            line.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            line.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             line.heightAnchor.constraint(equalToConstant: 0.5),
             line.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
             ])

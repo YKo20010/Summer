@@ -275,8 +275,8 @@ class RegisterController: UIViewController, UIImagePickerControllerDelegate, UIN
             
             guard let uid = authResult?.user.uid else {return}
             let imageName = NSUUID().uuidString
-            let storageRef = Storage.storage().reference().child("profile_images").child("\(imageName).png")
-            if let uploadData = UIImagePNGRepresentation(self.profileImageView.image!) {
+            let storageRef = Storage.storage().reference().child("profile_images").child("\(imageName).jpg")
+            if let profileImage = self.profileImageView.image, let uploadData = UIImageJPEGRepresentation(profileImage, 0.1) {
                 storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
                     if (error != nil) {
                         print(error)

@@ -9,9 +9,6 @@
 import Foundation
 import UIKit
 
-protocol showChat: class {
-    func presentChat(chatController: ChatController)
-}
 class CustomTabBarController: UITabBarController {
     
     let co_tabBarBackground: UIColor = .white
@@ -38,18 +35,12 @@ class CustomTabBarController: UITabBarController {
         nav_home.tabBarItem.image = UIImage(named: "iconChat")
         
         /*********************     SETTINGS VIEW CONTROLLER    ********************/
-        profileController.navigationItem.title = "Profile"
+        profileController.navigationItem.title = " "
         let nav_profile = UINavigationController(rootViewController: profileController)
         nav_profile.title = "Profile"
         nav_profile.tabBarItem.image = UIImage(named: "iconProfile")
   
         /*********************     Set ViewControllers for TabBarController    ********************/
         viewControllers = [nav_home, nav_profile]
-    }
-}
-
-extension CustomTabBarController: showChat {
-    func presentChat(chatController: ChatController) {
-        self.nav_home.present(chatController, animated: true, completion: nil)
     }
 }
