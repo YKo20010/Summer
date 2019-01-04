@@ -1,5 +1,5 @@
 # Summer
 ### Messaging App
 Winter Break Project
- - Using Google Firebase
+ - Google Firebase Database/Storage/Auth
  - Pod folder not uploaded
