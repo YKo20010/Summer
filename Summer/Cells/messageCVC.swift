@@ -18,14 +18,16 @@ class messageCVC: UICollectionViewCell {
         l.text = ""
         return l
     }()
-    var textView: UITextView = {
-        let tv = UITextView()
+    var textView: UILabel = {
+        let tv = UILabel()
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.font = UIFont.systemFont(ofSize: 16, weight: .light)
         tv.textColor = .black
-        tv.isEditable = false
+        //tv.isEditable = false
         tv.text = ""
-        tv.isScrollEnabled = false
+        //tv.isScrollEnabled = false
+        tv.sizeToFit()
+        tv.numberOfLines = 0
         return tv
     }()
     let sep: UIView = {
@@ -34,8 +36,17 @@ class messageCVC: UICollectionViewCell {
         view.backgroundColor = .black
         return view
     }()
+    let messageImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFit
+        iv.backgroundColor = .clear
+        return iv
+    }()
     
     let pad: CGFloat = 8
+    var imageWidthAnchor: NSLayoutConstraint?
+    var imageHeightAnchor: NSLayoutConstraint?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,7 +57,6 @@ class messageCVC: UICollectionViewCell {
             userLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: pad),
             userLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -1.0 * pad)
             ])
-        
         let sepWidth: CGFloat = 1
         contentView.addSubview(sep)
         NSLayoutConstraint.activate([
@@ -59,9 +69,15 @@ class messageCVC: UICollectionViewCell {
         NSLayoutConstraint.activate([
             textView.leadingAnchor.constraint(equalTo: sep.trailingAnchor, constant: pad),
             textView.topAnchor.constraint(equalTo: userLabel.bottomAnchor),
-            textView.widthAnchor.constraint(equalToConstant: contentView.frame.width - 3.0 * pad - sepWidth),
-            textView.heightAnchor.constraint(equalTo: contentView.heightAnchor)
+            textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -1.0 * pad)
             ])
+        contentView.addSubview(messageImageView)
+        messageImageView.leadingAnchor.constraint(equalTo: sep.trailingAnchor, constant: pad).isActive = true
+        messageImageView.topAnchor.constraint(equalTo: userLabel.bottomAnchor, constant: pad).isActive = true
+        imageWidthAnchor = messageImageView.widthAnchor.constraint(equalToConstant: 100)
+        imageWidthAnchor?.isActive = true
+        imageHeightAnchor = messageImageView.heightAnchor.constraint(equalToConstant: 100)
+        imageHeightAnchor?.isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

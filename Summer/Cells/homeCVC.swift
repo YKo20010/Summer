@@ -59,7 +59,6 @@ class homeCVC: UICollectionViewCell {
         let lineWidth = contentView.frame.width - 2*padding
         line = UIImageView()
         line.translatesAutoresizingMaskIntoConstraints = false
-        //UIColor(red: 133/255, green: 226/255, blue: 209/255, alpha: 1)
         line.backgroundColor = .white
         line.layer.cornerRadius = 10
         line.layer.masksToBounds = true

@@ -12,7 +12,7 @@ import UIKit
 class CustomTabBarController: UITabBarController {
     
     let co_tabBarBackground: UIColor = .white
-    let co_tabBarTint: UIColor = UIColor(red: 133/255, green: 226/255, blue: 209/255, alpha: 1)
+    let co_tabBarTint: UIColor = Static.lightAqua
     var nav_home: UINavigationController!
     
     var homeController: ViewController! = ViewController()

@@ -36,19 +36,19 @@ class profileView: UIView {
     let sep1: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(red: 211/255, green: 211/255, blue: 211/255, alpha: 1)
+        view.backgroundColor = Static.customGray
         return view
     }()
     let sep2: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(red: 211/255, green: 211/255, blue: 211/255, alpha: 1)
+        view.backgroundColor = Static.customGray
         return view
     }()
     let sep3: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(red: 211/255, green: 211/255, blue: 211/255, alpha: 1)
+        view.backgroundColor = Static.customGray
         return view
     }()
     var nLabel: UILabel = {

@@ -26,6 +26,8 @@
 		03276EF521D554880057325C /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03276EF421D554880057325C /* Extension.swift */; };
 		03276EF721D577260057325C /* profileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03276EF621D577260057325C /* profileView.swift */; };
 		03276EF921D58A700057325C /* messageCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03276EF821D58A700057325C /* messageCVC.swift */; };
+		03EF5B0321DEA68F00D80E1D /* KeyboardExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EF5B0221DEA68F00D80E1D /* KeyboardExtension.swift */; };
+		03EF5B0521DEDBA900D80E1D /* Static.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EF5B0421DEDBA900D80E1D /* Static.swift */; };
 		67C0AABA235F8897BB132924 /* Pods_Summer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB745EC034316F37BA3B223 /* Pods_Summer.framework */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +53,8 @@
 		03276EF421D554880057325C /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		03276EF621D577260057325C /* profileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = profileView.swift; sourceTree = "<group>"; };
 		03276EF821D58A700057325C /* messageCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = messageCVC.swift; sourceTree = "<group>"; };
+		03EF5B0221DEA68F00D80E1D /* KeyboardExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardExtension.swift; sourceTree = "<group>"; };
+		03EF5B0421DEDBA900D80E1D /* Static.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Static.swift; sourceTree = "<group>"; };
 		0DB745EC034316F37BA3B223 /* Pods_Summer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Summer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1190DA37D2412ED547878965 /* Pods-Summer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Summer.release.xcconfig"; path = "Pods/Target Support Files/Pods-Summer/Pods-Summer.release.xcconfig"; sourceTree = "<group>"; };
 		45343EB360F0B7CD1907B633 /* Pods-Summer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Summer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Summer/Pods-Summer.debug.xcconfig"; sourceTree = "<group>"; };
@@ -91,6 +95,8 @@
 			children = (
 				03276EC521D173630057325C /* AppDelegate.swift */,
 				03276EF421D554880057325C /* Extension.swift */,
+				03EF5B0221DEA68F00D80E1D /* KeyboardExtension.swift */,
+				03EF5B0421DEDBA900D80E1D /* Static.swift */,
 				03276EF021D1B56F0057325C /* Login Views */,
 				03276EE021D196D70057325C /* CustomTabBarController.swift */,
 				03276EEF21D1B5620057325C /* Main Views */,
@@ -279,9 +285,11 @@
 				03276EE321D197240057325C /* ChatController.swift in Sources */,
 				03276EEE21D1B5410057325C /* DiscoverController.swift in Sources */,
 				03276EDB21D174CC0057325C /* RegisterController.swift in Sources */,
+				03EF5B0521DEDBA900D80E1D /* Static.swift in Sources */,
 				03276EE521D197CC0057325C /* ProfileController.swift in Sources */,
 				03276EEA21D19F2B0057325C /* models.swift in Sources */,
 				03276EE821D19C810057325C /* homeCVC.swift in Sources */,
+				03EF5B0321DEA68F00D80E1D /* KeyboardExtension.swift in Sources */,
 				03276EC621D173630057325C /* AppDelegate.swift in Sources */,
 				03276EF921D58A700057325C /* messageCVC.swift in Sources */,
 				03276EF521D554880057325C /* Extension.swift in Sources */,

@@ -26,24 +26,24 @@ class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICo
     var messages: [Message] = []
     var strToMessage = [String : Message]()
     
+    /*********************     SET UP VIEWS    ********************/
     override func viewDidAppear(_ animated: Bool) {
         navigationController?.title = "Messages"
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
         navigationController?.navigationBar.prefersLargeTitles = true
-        loadMessages()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.barTintColor = UIColor(red: 133/255, green: 226/255, blue: 209/255, alpha: 1)
+        navigationController?.navigationBar.barTintColor = Static.lightAqua
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.backgroundColor = UIColor(red: 133/255, green: 226/255, blue: 209/255, alpha: 1)
+        navigationController?.navigationBar.backgroundColor = Static.lightAqua
     
         viewHeight = view.frame.height
         viewWidth = view.frame.width
@@ -57,8 +57,7 @@ class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICo
         layout.minimumLineSpacing = 0
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        //UIColor(red: 133/255, green: 226/255, blue: 209/255, alpha: 1)
-        collectionView.backgroundColor = UIColor(red: 133/255, green: 226/255, blue: 209/255, alpha: 1)
+        collectionView.backgroundColor = Static.lightAqua
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.alwaysBounceVertical = true
@@ -71,8 +70,10 @@ class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICo
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
             ])
+        loadMessages()
     }
     
+    /*********************     ACTION FUNCTIONS    ********************/
     @objc func discover() { //newBarButton
         let discoverController = DiscoverController()
         discoverController.me = self.me
@@ -87,61 +88,52 @@ class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICo
         self.navigationController?.pushViewController(chatController, animated: true)
     }
     
-    func loadAllMessages() {
-        messages = []
-        let ref = Database.database().reference().child("messages")
-        ref.observe(.childAdded, with: { (snapshot) in
-            if let dictionary = snapshot.value as? [String: AnyObject] {
-                let message = Message()
-                message.fromId = dictionary["fromId"] as? String
-                message.toId = dictionary["toId"] as? String
-                message.text = dictionary["text"] as? String
-                message.timestamp = dictionary["timestamp"] as? Double
-                self.messages.append(message)
-                if let toId = message.toId {
-                    self.strToMessage[toId] = message
-                    self.messages = Array(self.strToMessage.values)
-                    self.messages.sort(by: { (m1, m2) -> Bool in
-                        return m1.timestamp! > m2.timestamp!
-                    })
-                }
-                DispatchQueue.main.async {
-                    self.collectionView?.reloadData()
-                }
-            }
-        }, withCancel: nil)
-    }
-    
+    /*********************     LOAD CHAT FUNCTIONS    ********************/
     func loadMessages() {
         messages = []
         strToMessage = [:]
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let ref = Database.database().reference().child("user-messages").child(uid)
         ref.observe(.childAdded, with: { (snapshot) in
-            let messageId = snapshot.key
-            let messageReference = Database.database().reference().child("messages").child(messageId)
-            messageReference.observeSingleEvent(of: .value, with: { (snapshot) in
-                if let dictionary = snapshot.value as? [String: AnyObject] {
-                    let message = Message()
-                    message.fromId = dictionary["fromId"] as? String
-                    message.toId = dictionary["toId"] as? String
-                    message.text = dictionary["text"] as? String
-                    message.timestamp = dictionary["timestamp"] as? Double
-                    self.messages.append(message)
-                    guard let id = message.chatPartnerId() else { return }
-                    self.strToMessage[id] = message
-                    self.messages = Array(self.strToMessage.values)
-                    self.messages.sort(by: { (m1, m2) -> Bool in
-                        return m1.timestamp! > m2.timestamp!
-                    })
-                    DispatchQueue.main.async {
-                        self.collectionView?.reloadData()
-                    }
-                }
+            let userId = snapshot.key
+            Database.database().reference().child("user-messages").child(uid).child(userId).observe(.childAdded, with: { (snapshot) in
+                self.loadMessage(messageId: snapshot.key)
             }, withCancel: nil)
         }, withCancel: nil)
     }
     
+    private func loadMessage(messageId: String) {
+        let messageRef = Database.database().reference().child("messages").child(messageId)
+        messageRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            if let dictionary = snapshot.value as? [String: AnyObject] {
+                let message = Message(dictionary: dictionary)
+                self.messages.append(message)
+                if let id = message.chatPartnerId() {
+                    self.strToMessage[id] = message
+                }
+                self.attemptReloadCV()
+            }
+        }, withCancel: nil)
+    }
+    
+    private func attemptReloadCV() {
+        self.timer?.invalidate()
+        self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.reloadCV), userInfo: nil, repeats: false)
+    }
+    
+    var timer: Timer?
+    
+    @objc func reloadCV() {
+        self.messages = Array(self.strToMessage.values)
+        self.messages.sort(by: { (m1, m2) -> Bool in
+            return m1.timestamp! > m2.timestamp!
+        })
+        DispatchQueue.main.async {
+            self.collectionView?.reloadData()
+        }
+    }
+    
+    /*********************     COLLECTION VIEW FUNCTIONS    ********************/
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return messages.count
     }
@@ -163,12 +155,7 @@ class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICo
         let ref = Database.database().reference().child("users").child(id)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let dictionary = snapshot.value as? [String: AnyObject] else { return }
-            let user = Person()
-            user.name = dictionary["name"] as? String
-            user.profileImageName = dictionary["profileImageURL"] as? String
-            user.email = dictionary["email"] as? String
-            user.username = dictionary["username"] as? String
-            user.id = snapshot.key
+            let user = Person(dictionary: dictionary, id: snapshot.key)
             self.showChatController(user: user)
         }, withCancel: nil)
     }
@@ -180,8 +167,6 @@ class ViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICo
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
-
 }
 
 extension ViewController: showChat {

@@ -20,7 +20,7 @@ class ProfileController: UIViewController {
     var logoutButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor(red: 81/255, green: 188/255, blue: 168/255, alpha: 1)
+        button.backgroundColor = Static.darkAqua
         button.setTitle("Logout", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         button.layer.masksToBounds = true
@@ -39,7 +39,7 @@ class ProfileController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.barTintColor = UIColor(red: 81/255, green: 188/255, blue: 168/255, alpha: 1)
+        navigationController?.navigationBar.barTintColor = Static.darkAqua
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
         navigationController?.navigationBar.isTranslucent = false

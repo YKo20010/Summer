@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class DiscoverController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate {
+class DiscoverController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UIGestureRecognizerDelegate {
     
     weak var delegate: showChat?
     
@@ -23,7 +23,11 @@ class DiscoverController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var selected_people: [Person] = []
     var me: Person?
     let cellId = "cellId"
+    
+    var pan: UIPanGestureRecognizer!
+    var collectionViewBottomAnchor: NSLayoutConstraint?
    
+    /*********************     SET UP VIEWS    ********************/
     override func viewDidAppear(_ animated: Bool) {
         navigationController?.navigationBar.prefersLargeTitles = false
         loadPeople()
@@ -35,7 +39,7 @@ class DiscoverController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         navigationController?.navigationBar.isHidden = false
         navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.barTintColor = UIColor(red: 133/255, green: 226/255, blue: 209/255, alpha: 1)
+        navigationController?.navigationBar.barTintColor = Static.lightAqua
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
         navigationController?.navigationBar.prefersLargeTitles = false
@@ -47,7 +51,7 @@ class DiscoverController: UIViewController, UICollectionViewDelegateFlowLayout, 
         searchController = UISearchBar()
         searchController.translatesAutoresizingMaskIntoConstraints = false
         searchController.sizeToFit()
-        searchController.barTintColor = UIColor(red: 133/255, green: 226/255, blue: 209/255, alpha: 1)
+        searchController.barTintColor = Static.lightAqua
         searchController.backgroundImage = UIImage()
         searchController.isTranslucent = false
         searchController.layer.borderWidth = 0
@@ -74,15 +78,23 @@ class DiscoverController: UIViewController, UICollectionViewDelegateFlowLayout, 
         collectionView.alwaysBounceVertical = true
         collectionView.register(personCVC.self, forCellWithReuseIdentifier: cellId)
         collectionView.showsVerticalScrollIndicator = false
+        collectionView.keyboardDismissMode = .interactive
         view.addSubview(collectionView)
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: searchController.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            ])
+        collectionView.topAnchor.constraint(equalTo: searchController.bottomAnchor).isActive = true
+        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+//        collectionViewBottomAnchor = collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+//        collectionViewBottomAnchor?.isActive = true
+        
+        setUpKeyboard()
+        
+        pan = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
+        pan.delegate = self
+        view.addGestureRecognizer(pan)
     }
     
+    /*********************     SEARCHBAR    ********************/
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if let searchText = searchController.text?.lowercased() {
             if !searchText.isEmpty {
@@ -96,27 +108,31 @@ class DiscoverController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
     }
     
+    /*********************     LOAD USERS    ********************/
     func loadPeople() {
         people = []
         selected_people = []
         Database.database().reference().child("users").observe(.childAdded, with: { (dataSnapshot) in
             if let dictionary = dataSnapshot.value as? [String: AnyObject] {
-                let user = Person()
-                user.name = dictionary["name"] as? String
-                user.profileImageName = dictionary["profileImageURL"] as? String
-                user.email = dictionary["email"] as? String
-                user.username = dictionary["username"] as? String
-                user.id = dataSnapshot.key
-                if (user.email != self.me?.email) {
+                let user = Person(dictionary: dictionary, id: dataSnapshot.key)
+                if (user.id != self.me?.id) {
                     self.people.append(user)
                 }
-                DispatchQueue.main.async {
-                    self.collectionView?.reloadData()
-                }
+                self.timer?.invalidate()
+                self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.reloadCV), userInfo: nil, repeats: false)
             }
         }, withCancel: nil)
     }
+    
+    var timer: Timer?
+    
+    @objc func reloadCV() {
+        DispatchQueue.main.async {
+            self.collectionView?.reloadData()
+        }
+    }
 
+    /*********************     COLLECTION VIEW FUNCTIONS    ********************/
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return selected_people.count
     }

@@ -27,19 +27,19 @@ class RegisterController: UIViewController, UIImagePickerControllerDelegate, UIN
     let sep1: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(red: 211/255, green: 211/255, blue: 211/255, alpha: 1)
+        view.backgroundColor = Static.customGray
         return view
     }()
     let sep2: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(red: 211/255, green: 211/255, blue: 211/255, alpha: 1)
+        view.backgroundColor = Static.customGray
         return view
     }()
     let sep3: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(red: 211/255, green: 211/255, blue: 211/255, alpha: 1)
+        view.backgroundColor = Static.customGray
         return view
     }()
     let rec: UIView = {
@@ -52,7 +52,7 @@ class RegisterController: UIViewController, UIImagePickerControllerDelegate, UIN
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(red: 133/255, green: 226/255, blue: 209/255, alpha: 1)
+        view.backgroundColor = Static.lightAqua
         
         inputsContainerView = UIView()
         inputsContainerView.translatesAutoresizingMaskIntoConstraints = false
@@ -70,7 +70,7 @@ class RegisterController: UIViewController, UIImagePickerControllerDelegate, UIN
         let registerButtonHeight: CGFloat = 50
         registerButton = UIButton()
         registerButton.translatesAutoresizingMaskIntoConstraints = false
-        registerButton.backgroundColor = UIColor(red: 81/255, green: 188/255, blue: 168/255, alpha: 1)
+        registerButton.backgroundColor = Static.darkAqua
         registerButton.setTitle("Register", for: .normal)
         registerButton.setTitleColor(.white, for: .normal)
         registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)

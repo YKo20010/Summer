@@ -23,7 +23,7 @@ class LoginController: UIViewController {
     let sep1: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(red: 211/255, green: 211/255, blue: 211/255, alpha: 1)
+        view.backgroundColor = Static.customGray
         return view
     }()
     let rec: UIView = {
@@ -38,7 +38,7 @@ class LoginController: UIViewController {
         
         navigationController?.navigationBar.isHidden = true
         
-        view.backgroundColor = UIColor(red: 133/255, green: 226/255, blue: 209/255, alpha: 1)
+        view.backgroundColor = Static.lightAqua
         
         inputsContainerView = UIView()
         inputsContainerView.translatesAutoresizingMaskIntoConstraints = false
@@ -56,7 +56,7 @@ class LoginController: UIViewController {
         let loginButtonHeight: CGFloat = 50
         loginButton = UIButton()
         loginButton.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.backgroundColor = UIColor(red: 81/255, green: 188/255, blue: 168/255, alpha: 1)
+        loginButton.backgroundColor = Static.darkAqua
         loginButton.setTitle("Sign In", for: .normal)
         loginButton.setTitleColor(.white, for: .normal)
         loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
@@ -156,16 +156,10 @@ class LoginController: UIViewController {
             }
             let tabView = CustomTabBarController()
             let uid = Auth.auth().currentUser?.uid
-            tabView.homeController.loadMessages()
             DispatchQueue.main.async {
                 Database.database().reference().child("users").child(uid!).observeSingleEvent(of: .value, with: { (dataSnapshot) in
                     if let dictionary = dataSnapshot.value as? [String: AnyObject] {
-                        let person = Person()
-                        person.name = dictionary["name"] as? String
-                        person.email = (dictionary["email"] as? String)!
-                        person.id = uid
-                        person.profileImageName = dictionary["profileImageURL"] as? String
-                        person.username = dictionary["username"] as? String
+                        let person = Person(dictionary: dictionary, id: uid!)
                         tabView.homeController.me = person
                         tabView.profileController.me = person
                         if let profileImageURL = person.profileImageName {
