@@ -2,8 +2,8 @@
 ### Messaging App
 Winter Break Project
  - Google Firebase Database/Storage/Auth
- - WIP
- 
+
+### W.I.P. Screenshots
  <img src="screenshots/login2.png" width="207" height="370"> <img src="screenshots/login.png" width="207" height="370"> <img src="screenshots/register.png" width="207" height="370"> <img src="screenshots/register2.png" width="207" height="370">
  
  
