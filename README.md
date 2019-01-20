@@ -11,4 +11,7 @@ Winter Break Project
  
  
  <img src="screenshots/chat.png" width="207" height="370"> <img src="screenshots/photo.png" width="207" height="370"> <img src="screenshots/chat2.png" width="207" height="370"> <img src="screenshots/chat3.png" width="207" height="370">
+ 
+ ### (WIP) Updated UI and added Drawing Functionality
+ <img src="screenshots/7home.png" width="207" height="370"> <img src="screenshots/7messages.png" width="207" height="370"> <img src="screenshots/7draw.png" width="207" height="370"> <img src="screenshots/7messages2.png" width="207" height="370">
 
