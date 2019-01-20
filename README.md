@@ -14,4 +14,6 @@ Winter Break Project
  
  ### (WIP) Updated UI and added Drawing Functionality
  <img src="screenshots/7home.png" width="207" height="370"> <img src="screenshots/7messages.png" width="207" height="370"> <img src="screenshots/7draw.png" width="207" height="370"> <img src="screenshots/7messages2.png" width="207" height="370">
+ 
+ <img src="screenshots/Xmessages2.png" width="207" height="447.5"> <img src="screenshots/Xdiscover.png" width="207" height="447.5"> <img src="screenshots/Xmessages.png" width="207" height="447.5">
 
