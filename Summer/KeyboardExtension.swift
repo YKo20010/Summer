@@ -62,6 +62,90 @@ extension ChatController {
     }
 }
 
+extension RegisterController {
+    /*********************     KEYBOARD: show/hide/swipe down to hide    ********************/
+    @objc func onPan(_ pan: UIPanGestureRecognizer) {
+        passwordTextField.endEditing(true)
+        emailTextField.endEditing(true)
+        nameTextField.endEditing(true)
+        usernameTextField.endEditing(true)
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return abs((pan.velocity(in: pan.view)).y) > abs((pan.velocity(in: pan.view)).x) && pan.velocity(in: pan.view).y > 0
+    }
+    
+    func setUpKeyboard() {
+        NotificationCenter.default.addObserver(self, selector: #selector(showKeyboard), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideKeyboard), name: .UIKeyboardWillHide, object: nil)
+    }
+    
+    @objc func showKeyboard(notification: NSNotification) {
+        let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! CGRect
+        let keyboardDuration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as! Double
+        UIView.animate(withDuration: keyboardDuration) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc func hideKeyboard(notification: NSNotification) {
+        let keyboardDuration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as! Double
+        UIView.animate(withDuration: keyboardDuration) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+}
+
+extension LoginController {
+    /*********************     KEYBOARD: show/hide/swipe down to hide    ********************/
+    @objc func onPan(_ pan: UIPanGestureRecognizer) {
+        emailTextField.endEditing(true)
+        passwordTextField.endEditing(true)
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return abs((pan.velocity(in: pan.view)).y) > abs((pan.velocity(in: pan.view)).x) && pan.velocity(in: pan.view).y > 0
+    }
+    
+    func setUpKeyboard() {
+        NotificationCenter.default.addObserver(self, selector: #selector(showKeyboard), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideKeyboard), name: .UIKeyboardWillHide, object: nil)
+    }
+    
+    @objc func showKeyboard(notification: NSNotification) {
+        let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! CGRect
+        let keyboardDuration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as! Double
+        UIView.animate(withDuration: keyboardDuration) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc func hideKeyboard(notification: NSNotification) {
+        let keyboardDuration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as! Double
+        UIView.animate(withDuration: keyboardDuration) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+}
+
 extension DiscoverController {
     /*********************     KEYBOARD: show/hide/swipe to hide    ********************/
     @objc func onPan(_ pan: UIPanGestureRecognizer) {

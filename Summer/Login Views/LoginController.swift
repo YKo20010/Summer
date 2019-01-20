@@ -9,9 +9,8 @@
 import UIKit
 import Firebase
 
-class LoginController: UIViewController {
+class LoginController: UIViewController, UIGestureRecognizerDelegate {
 
-    var inputsContainerView: UIView!
     var loginButton: UIButton!
     var registerButton: UIButton!
     var registerLabel: UILabel!
@@ -20,10 +19,20 @@ class LoginController: UIViewController {
     var passwordTextField: UITextField!
     var imageView: UIImageView!
     
-    let sep1: UIView = {
+    let inputRec1: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Static.customGray
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 25
+        view.layer.masksToBounds = true
+        return view
+    }()
+    let inputRec2: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 25
+        view.layer.masksToBounds = true
         return view
     }()
     let rec: UIView = {
@@ -33,44 +42,14 @@ class LoginController: UIViewController {
         return view
     }()
     
+    var pan: UIPanGestureRecognizer!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationController?.navigationBar.isHidden = true
         
         view.backgroundColor = Static.lightAqua
-        
-        inputsContainerView = UIView()
-        inputsContainerView.translatesAutoresizingMaskIntoConstraints = false
-        inputsContainerView.backgroundColor = .white
-        inputsContainerView.layer.cornerRadius = 5
-        inputsContainerView.layer.masksToBounds = true
-        view.addSubview(inputsContainerView)
-        NSLayoutConstraint.activate([
-            inputsContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            inputsContainerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            inputsContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -50),
-            inputsContainerView.heightAnchor.constraint(equalToConstant: 100)
-            ])
-        
-        let loginButtonHeight: CGFloat = 50
-        loginButton = UIButton()
-        loginButton.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.backgroundColor = Static.darkAqua
-        loginButton.setTitle("Sign In", for: .normal)
-        loginButton.setTitleColor(.white, for: .normal)
-        loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-        loginButton.layer.cornerRadius = loginButtonHeight/2
-        loginButton.layer.masksToBounds = true
-        loginButton.contentMode = .scaleAspectFit
-        loginButton.addTarget(self, action: #selector(login), for: .touchDown)
-        view.addSubview(loginButton)
-        NSLayoutConstraint.activate([
-            loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loginButton.topAnchor.constraint(equalTo: inputsContainerView.bottomAnchor, constant: 20),
-            loginButton.widthAnchor.constraint(equalToConstant: 200),
-            loginButton.heightAnchor.constraint(equalToConstant: loginButtonHeight)
-            ])
         
         view.addSubview(rec)
         registerLabel = UILabel()
@@ -102,34 +81,58 @@ class LoginController: UIViewController {
             rec.heightAnchor.constraint(equalToConstant: 0.5)
             ])
         
+        view.addSubview(inputRec1)
+        inputRec1.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        inputRec1.bottomAnchor.constraint(equalTo: view.centerYAnchor, constant: -5).isActive = true
+        inputRec1.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -50).isActive = true
+        inputRec1.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
         emailTextField = UITextField()
         emailTextField.translatesAutoresizingMaskIntoConstraints = false
         emailTextField.placeholder = "Email"
-        inputsContainerView.addSubview(emailTextField)
+        view.addSubview(emailTextField)
         NSLayoutConstraint.activate([
-            emailTextField.centerXAnchor.constraint(equalTo: inputsContainerView.centerXAnchor),
-            emailTextField.topAnchor.constraint(equalTo: inputsContainerView.topAnchor),
-            emailTextField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor, constant: -24),
-            emailTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/2)
+            emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emailTextField.centerYAnchor.constraint(equalTo: inputRec1.centerYAnchor),
+            emailTextField.widthAnchor.constraint(equalTo: inputRec1.widthAnchor, constant: -40),
+            emailTextField.heightAnchor.constraint(equalToConstant: 50)
             ])
-        inputsContainerView.addSubview(sep1)
-        NSLayoutConstraint.activate([
-            sep1.centerXAnchor.constraint(equalTo: inputsContainerView.centerXAnchor),
-            sep1.topAnchor.constraint(equalTo: emailTextField.bottomAnchor),
-            sep1.heightAnchor.constraint(equalToConstant: 1),
-            sep1.widthAnchor.constraint(equalTo: emailTextField.widthAnchor)
-            ])
+        
+        view.addSubview(inputRec2)
+        inputRec2.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        inputRec2.topAnchor.constraint(equalTo: view.centerYAnchor, constant: 5).isActive = true
+        inputRec2.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -50).isActive = true
+        inputRec2.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         passwordTextField = UITextField()
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         passwordTextField.placeholder = "Password"
         passwordTextField.isSecureTextEntry = true
-        inputsContainerView.addSubview(passwordTextField)
+        view.addSubview(passwordTextField)
         NSLayoutConstraint.activate([
-            passwordTextField.centerXAnchor.constraint(equalTo: inputsContainerView.centerXAnchor),
-            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor),
-            passwordTextField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor, constant: -24),
-            passwordTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/2)
+            passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            passwordTextField.centerYAnchor.constraint(equalTo: inputRec2.centerYAnchor),
+            passwordTextField.widthAnchor.constraint(equalTo: inputRec2.widthAnchor, constant: -40),
+            passwordTextField.heightAnchor.constraint(equalToConstant: 50)
+            ])
+        
+        let loginButtonHeight: CGFloat = 50
+        loginButton = UIButton()
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
+        loginButton.backgroundColor = Static.darkAqua
+        loginButton.setTitle("Sign In", for: .normal)
+        loginButton.setTitleColor(.white, for: .normal)
+        loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        loginButton.layer.cornerRadius = loginButtonHeight/2
+        loginButton.layer.masksToBounds = true
+        loginButton.contentMode = .scaleAspectFit
+        loginButton.addTarget(self, action: #selector(login), for: .touchDown)
+        view.addSubview(loginButton)
+        NSLayoutConstraint.activate([
+            loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20),
+            loginButton.widthAnchor.constraint(equalToConstant: 200),
+            loginButton.heightAnchor.constraint(equalToConstant: loginButtonHeight)
             ])
         
         let imageViewHeight: CGFloat = 150
@@ -140,10 +143,14 @@ class LoginController: UIViewController {
         view.addSubview(imageView)
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            imageView.bottomAnchor.constraint(equalTo: inputsContainerView.topAnchor, constant: -20),
+            imageView.bottomAnchor.constraint(equalTo: emailTextField.topAnchor, constant: -20),
             imageView.widthAnchor.constraint(equalToConstant: imageViewHeight),
             imageView.heightAnchor.constraint(equalToConstant: imageViewHeight)
             ])
+        
+        pan = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
+        pan.delegate = self
+        view.addGestureRecognizer(pan)
     }
     
     @objc func login() { //loginButton
@@ -156,6 +163,7 @@ class LoginController: UIViewController {
             }
             let tabView = CustomTabBarController()
             let uid = Auth.auth().currentUser?.uid
+            
             DispatchQueue.main.async {
                 Database.database().reference().child("users").child(uid!).observeSingleEvent(of: .value, with: { (dataSnapshot) in
                     if let dictionary = dataSnapshot.value as? [String: AnyObject] {

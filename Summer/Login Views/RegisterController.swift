@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class RegisterController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class RegisterController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     
     var inputsContainerView: UIView!
     var registerButton: UIButton!
@@ -48,6 +48,8 @@ class RegisterController: UIViewController, UIImagePickerControllerDelegate, UIN
         view.backgroundColor = UIColor.white
         return view
     }()
+    
+    var pan: UIPanGestureRecognizer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -203,6 +205,10 @@ class RegisterController: UIViewController, UIImagePickerControllerDelegate, UIN
         alert.title = "Invalid Input"
         alert.message = ""
         alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: .none))
+   
+        pan = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
+        pan.delegate = self
+        view.addGestureRecognizer(pan)
     }
     
     @objc func changeProfileImage() {

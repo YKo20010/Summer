@@ -15,7 +15,7 @@ class personCVC: UICollectionViewCell {
     var usernameLabel: UILabel!
     
     let padding: CGFloat = 12
-    let textColor: UIColor = UIColor.gray
+    let textColor: UIColor = UIColor.black
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -23,7 +23,8 @@ class personCVC: UICollectionViewCell {
         
         line = UIImageView()
         line.translatesAutoresizingMaskIntoConstraints = false
-        line.backgroundColor = textColor
+        line.backgroundColor = Static.customGray
+        line.alpha = 0.5
         contentView.addSubview(line)
         NSLayoutConstraint.activate([
             line.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
@@ -53,7 +54,7 @@ class personCVC: UICollectionViewCell {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.text = "Name Label"
         nameLabel.textColor = textColor
-        nameLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        nameLabel.font = UIFont.systemFont(ofSize: 18, weight: .light)
         contentView.addSubview(nameLabel)
         NSLayoutConstraint.activate([
             nameLabel.bottomAnchor.constraint(equalTo: circleImage.centerYAnchor, constant: -1),
@@ -65,7 +66,8 @@ class personCVC: UICollectionViewCell {
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
         usernameLabel.text = "Username Label"
         usernameLabel.textColor = textColor
-        usernameLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        usernameLabel.alpha = 0.5
+        usernameLabel.font = UIFont.systemFont(ofSize: 14, weight: .ultraLight)
         contentView.addSubview(usernameLabel)
         NSLayoutConstraint.activate([
             usernameLabel.topAnchor.constraint(equalTo: circleImage.centerYAnchor, constant: 1),

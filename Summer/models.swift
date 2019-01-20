@@ -67,4 +67,10 @@ class Person: NSObject {
     }
 }
 
+struct Line {
+    let color: UIColor
+    let width: Float
+    var points: [CGPoint]
+}
+
 

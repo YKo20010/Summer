@@ -18,6 +18,7 @@ class CustomTabBarController: UITabBarController {
     var homeController: ViewController! = ViewController()
     var profileController: ProfileController! = ProfileController()
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,13 +32,13 @@ class CustomTabBarController: UITabBarController {
         /*********************     HOME VIEW CONTROLLER    ********************/
         homeController.navigationItem.title = "Messages"
         nav_home = UINavigationController(rootViewController: homeController)
-        nav_home.title = "Home"
+        nav_home.title = " "
         nav_home.tabBarItem.image = UIImage(named: "iconChat")
         
         /*********************     SETTINGS VIEW CONTROLLER    ********************/
         profileController.navigationItem.title = " "
         let nav_profile = UINavigationController(rootViewController: profileController)
-        nav_profile.title = "Profile"
+        nav_profile.title = " "
         nav_profile.tabBarItem.image = UIImage(named: "iconProfile")
   
         /*********************     Set ViewControllers for TabBarController    ********************/
