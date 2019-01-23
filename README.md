@@ -3,7 +3,7 @@
 Winter Break Project
  - Google Firebase Database/Storage/Auth
 
-### W.I.P. Screenshots
+### Screenshots
 ##### Login/Register/Messages/Chat/Users/Profile Pages:
  <img src="screenshots/login2.png" width="125" height="223"> <img src="screenshots/register.png" width="125" height="223"> <img src="screenshots/chatList.png" width="125" height="223"> <img src="screenshots/chat.png" width="125" height="223"> <img src="screenshots/discover.png" width="125" height="223"> <img src="screenshots/profile.png" width="125" height="223"> 
  
