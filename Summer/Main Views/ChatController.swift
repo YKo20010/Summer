@@ -62,7 +62,7 @@ class ChatController: UIViewController, UICollectionViewDelegateFlowLayout, UICo
     let drawImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.image = UIImage(named: "defaultImage")?.withRenderingMode(.alwaysTemplate)
+        iv.image = UIImage(named: "iconDraw")?.withRenderingMode(.alwaysTemplate)
         iv.tintColor = Static.customGray
         iv.contentMode = .scaleAspectFit
         return iv

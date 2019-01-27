@@ -12,7 +12,7 @@ class CanvasController: UIViewController {
     var me: Person?
     var user: Person? {
         didSet {
-            navigationItem.title = "Canvas"
+            navigationItem.title = ""
         }
     }
     
@@ -111,13 +111,13 @@ class CanvasController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         navigationController?.navigationBar.prefersLargeTitles = false
-        navigationItem.title = "Canvas"
+        navigationItem.title = ""
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = Static.lightAqua
         
         navigationController?.navigationBar.isHidden = false
         navigationController?.navigationBar.shadowImage = UIImage()
@@ -127,15 +127,29 @@ class CanvasController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.isTranslucent = false
         
-        undoButton = UIBarButtonItem(title: "Undo", style: .plain, target: self, action: #selector(undo))
-        clearButton = UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clear))
+        let b1 = UIButton()
+        b1.setImage(UIImage(named: "iconUndo"), for: .normal)
+        b1.addTarget(self, action: #selector(undo), for: .touchDown)
+        b1.contentMode = .scaleAspectFit
+        undoButton = UIBarButtonItem(customView: b1)
+        undoButton.customView?.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        undoButton.customView?.widthAnchor.constraint(equalToConstant: 30).isActive = true
         
-        let b = UIButton()
-        b.setImage(UIImage(named: "iconSend"), for: .normal)
-        b.addTarget(self, action: #selector(send), for: .touchDown)
-        sendButton = UIBarButtonItem(customView: b)
-        sendButton.customView?.heightAnchor.constraint(equalToConstant: 22).isActive = true
-        sendButton.customView?.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        let b2 = UIButton()
+        b2.setImage(UIImage(named: "iconRefresh"), for: .normal)
+        b2.addTarget(self, action: #selector(clear), for: .touchDown)
+        b2.contentMode = .scaleAspectFit
+        clearButton = UIBarButtonItem(customView: b2)
+        clearButton.customView?.heightAnchor.constraint(equalToConstant: 34).isActive = true
+        clearButton.customView?.widthAnchor.constraint(equalToConstant: 30).isActive = true
+    
+        let b3 = UIButton()
+        b3.setImage(UIImage(named: "iconSend"), for: .normal)
+        b3.addTarget(self, action: #selector(send), for: .touchDown)
+        b3.contentMode = .scaleAspectFit
+        sendButton = UIBarButtonItem(customView: b3)
+        sendButton.customView?.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        sendButton.customView?.widthAnchor.constraint(equalToConstant: 34).isActive = true
         
         self.navigationItem.rightBarButtonItems = [sendButton, clearButton, undoButton]
         
@@ -154,6 +168,10 @@ class CanvasController: UIViewController {
         slider.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         slider.bottomAnchor.constraint(equalTo: stackView.topAnchor, constant: -10).isActive = true
         slider.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        slider.minimumTrackTintColor = .white
+        slider.maximumTrackTintColor = Static.darkAqua
+        slider.thumbTintColor = .white
+        slider.layer.shadowOpacity = 0
         
         canvas.translatesAutoresizingMaskIntoConstraints = false
         canvas.backgroundColor = .white
