@@ -1,7 +1,7 @@
 # Summer
 ### Messaging App
-Winter Break Project
- - Google Firebase Database/Storage/Auth
+<img src="screenshots/summerIcon.png" width="125" height="125">
+Summer is a real-time messaging app created with Google Firebase. Users can register an account with their name, username, email, and password. The profile picture can be changed in registration by clicking on the profile icon and selecting an image from the camera roll. Once logged in, users can view and send messages to others, by selecting on a message in the home messages screen, or by tapping on the "New" button, allowing the user to start a conversation. Users can also send/receive images and drawings.
 
 ### Screenshots
 ##### Login/Register/Messages/Chat/Users/Profile Pages:
